@@ -4,13 +4,19 @@
 import json
 import types
 
+seps = []
+
+def extract_sep(n, i):
+	seps.append(n)
+
 def pprint_title(n, i):
 	print('\t' * i + n['title'])
 
 def pprint_sep(n, i):
 	print('\t' * i + '---')
 
-def traverse(node, hook_place, hook_sep = lambda n, i: None, depth = 0):
+def traverse(node, hook_place = lambda n, i: None,
+	hook_sep = lambda n, i: None, depth = 0):
 
 	t = node['type']
 
@@ -32,6 +38,9 @@ if __name__ == '__main__':
 	with open("bookmarks.json", "r") as f:
 		data = json.load(f)
 
-	traverse(data, pprint_title)
+	traverse(data, pprint_title, pprint_sep)
 	        # if isinstance(data, types.DictType):
 		# 	print('True!')
+
+	traverse(data, hook_sep = extract_sep)
+	print(seps)
